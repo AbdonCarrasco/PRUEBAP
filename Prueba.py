@@ -4,16 +4,17 @@ import folium
 import streamlit as st
 from streamlit_folium import st_folium
 
-# ✅ Solo una vez:
-st.set_page_config(page_title="Mapa + Chat LLM", layout="centered")
-st.title("📡 Mapa de Acceso Gratuito a Internet + Chat LLM")
 
 # ---------------- Chat LLM ----------------
-with st.expander("🧠 Mostrar Chat LLM (Local)"):
-    if st.button("Abrir Chat"):
-        with open("index.html", "r", encoding="utf-8") as f:
-            html = f.read()
-        st.components.v1.html(html, height=700)
+
+st.set_page_config(page_title="Chat LLM", layout="centered")
+st.title("📡 Mapa de Acceso Gratuito a Internet + Chat LLM")
+
+if st.button("Abrir Chat"):
+    with open("index.html", "r", encoding="utf-8") as f:
+        html = f.read()
+    st.components.v1.html(html, height=700)
+
 
 # ---------------- Mapa ----------------
 opcion = st.selectbox("Selecciona qué distrito mostrar:", ["Ambos", "La Victoria", "San Juan de Lurigancho"])
