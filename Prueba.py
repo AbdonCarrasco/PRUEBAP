@@ -6,10 +6,13 @@ from streamlit_folium import st_folium
 
 st.title("Mi Proyecto con Chat LLM")
 
+st.set_page_config(page_title="Chat LLM", layout="centered")
+st.title("Mi Proyecto con Chat LLM")
+
 if st.button("Abrir Chat"):
     with open("index.html", "r", encoding="utf-8") as f:
         html = f.read()
-    st.components.v1.html(html, height=600)
+    st.components.v1.html(html, height=700)
 
 
 
