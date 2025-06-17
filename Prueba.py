@@ -5,18 +5,16 @@ import streamlit as st
 from streamlit_folium import st_folium
 
 # Configuración de la página
-st.set_page_config(page_title="Mapa + Chat LLM", layout="centered")
+
+st.set_page_config(page_title="Mapa + Chat", layout="centered")
 st.title("📡 Mapa de Acceso Gratuito a Internet + Chat LLM")
 
-# ---------------- CHATBOT ----------------
 st.markdown("### 🧠 Chat LLM local")
+
 if st.button("Abrir Chat"):
-    try:
-        with open("index.html", "r", encoding="utf-8") as f:
-            html = f.read()
-        st.components.v1.html(html, height=700)
-    except FileNotFoundError:
-        st.error("⚠️ No se encontró el archivo index.html. Asegúrate de que esté en la misma carpeta.")
+    with open("index.html", "r", encoding="utf-8") as f:
+        html = f.read()
+    st.components.v1.html(html, height=700)
 
 # ---------------- MAPA ----------------
 opcion = st.selectbox("Selecciona qué distrito mostrar:", ["Ambos", "La Victoria", "San Juan de Lurigancho"])
