@@ -4,30 +4,30 @@ import folium
 import streamlit as st
 from streamlit_folium import st_folium
 
-# Configuración de la página
-
+# ✅ Configuración de la página (solo una vez, arriba de todo)
 st.set_page_config(page_title="Mapa + Chat", layout="centered")
 st.title("📡 Mapa de Acceso Gratuito a Internet + Chat LLM")
 
+# 🧠 BOTÓN PARA MOSTRAR EL CHAT
 st.markdown("### 🧠 Chat LLM local")
 
 if st.button("Abrir Chat"):
-    with open("index.html", "r", encoding="utf-8") as f:
-        html = f.read()
-    st.components.v1.html(html, height=700)
+    try:
+        with open("index.html", "r", encoding="utf-8") as f:
+            html = f.read()
+        st.components.v1.html(html, height=700)
+    except FileNotFoundError:
+        st.error("❌ No se encontró el archivo index.html. Asegúrate de que esté en esta carpeta.")
 
-# ---------------- MAPA ----------------
+# 📍 MENÚ Y LECTURA DE ARCHIVOS
 opcion = st.selectbox("Selecciona qué distrito mostrar:", ["Ambos", "La Victoria", "San Juan de Lurigancho"])
 
-# Cargar datos
 df_victoria = pd.read_csv("la_victoria.csv")
 df_lurigancho = pd.read_csv("san_juan_de_lurigancho.csv")
 
-# Limpiar vacíos
 df_victoria.dropna(subset=["latitud", "longitud"], inplace=True)
 df_lurigancho.dropna(subset=["latitud", "longitud"], inplace=True)
 
-# Definir qué puntos mostrar
 if opcion == "La Victoria":
     df_puntos = df_victoria
 elif opcion == "San Juan de Lurigancho":
@@ -35,10 +35,9 @@ elif opcion == "San Juan de Lurigancho":
 else:
     df_puntos = pd.concat([df_victoria, df_lurigancho])
 
-# Crear mapa
+# 🗺️ CREAR MAPA
 m = folium.Map(location=[df_puntos.latitud.mean(), df_puntos.longitud.mean()], zoom_start=12)
 
-# Algoritmo de Prim para conectar puntos
 def conectar_puntos_prim(df):
     lugares = df[["nombre_lugar", "latitud", "longitud"]].values
     num_lugares = len(lugares)
@@ -65,7 +64,7 @@ def conectar_puntos_prim(df):
         lat2, lon2 = df[df["nombre_lugar"] == lugar2][["latitud", "longitud"]].values[0]
         folium.PolyLine([(lat1, lon1), (lat2, lon2)], color="blue").add_to(m)
 
-# Agregar marcadores y líneas
+# 📌 AGREGAR MARCADORES Y CONEXIONES
 if opcion in ["Ambos", "La Victoria"]:
     df_victoria.apply(lambda row: folium.Marker([row.latitud, row.longitud], popup=row.nombre_lugar).add_to(m), axis=1)
     conectar_puntos_prim(df_victoria)
@@ -74,6 +73,6 @@ if opcion in ["Ambos", "San Juan de Lurigancho"]:
     df_lurigancho.apply(lambda row: folium.Marker([row.latitud, row.longitud], popup=row.nombre_lugar).add_to(m), axis=1)
     conectar_puntos_prim(df_lurigancho)
 
-# Mostrar mapa
+# 🌍 MOSTRAR MAPA EN STREAMLIT
 st.markdown("### 🗺️ Mapa interactivo con conexión entre puntos")
 st_folium(m, width=800, height=600)
