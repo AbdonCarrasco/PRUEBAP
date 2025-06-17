@@ -4,10 +4,12 @@ import folium
 import streamlit as st
 from streamlit_folium import st_folium
 
-with open("index.html", "r", encoding="utf-8") as f:
-    html_code = f.read()
+st.title("Mi Proyecto con Chat LLM")
 
-st.components.v1.html(html_code, height=600)
+if st.button("Abrir Chat"):
+    with open("index.html", "r", encoding="utf-8") as f:
+        html = f.read()
+    st.components.v1.html(html, height=600)
 
 
 
