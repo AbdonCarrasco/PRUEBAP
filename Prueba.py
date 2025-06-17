@@ -4,6 +4,15 @@ import folium
 import streamlit as st
 from streamlit_folium import st_folium
 
+with open("index.html", "r", encoding="utf-8") as f:
+    html_code = f.read()
+
+st.components.v1.html(html_code, height=600)
+
+
+
+
+
 st.set_page_config(page_title="Mapa WiFi Gratuito", layout="centered")
 st.title("📡 Mapa de Acceso Gratuito a Internet por Distrito")
 
