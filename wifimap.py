@@ -24,9 +24,10 @@ def obtener_puntos_wifi():
     time.sleep(10)  # Esperar carga del mapa
 
     # Ejecutar JS para obtener puntos desde el mapa
-    data_js = driver.execute_script("""
-        return window.__WIFI_MAP_APP_STORE__?.hotspots || [];
-    """)
+    html = driver.page_source
+    with open("pagina_wifimap.html", "w", encoding="utf-8") as f:
+        f.write(html)
+
     driver.quit()
 
     datos = []
